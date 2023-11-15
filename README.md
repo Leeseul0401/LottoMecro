@@ -1,0 +1,2 @@
+# LottoMecro
+LottoMecro
