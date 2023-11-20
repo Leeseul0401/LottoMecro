@@ -3,10 +3,12 @@ package LottoMecro;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -16,12 +18,15 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class Login extends JDialog implements ActionListener {
-	private Lotto owner;		// Lotto 객체
+public class Login extends JDialog {
+	private Lotto owner;			// Lotto 객체
+	private DbConnection loginChk = new DbConnection();	//	Login check 객
+	private Join join;
+	
 	private String[][] id;
 	
-	private JLabel lblId;	//	ID
-	private JLabel lblPw;	//	Password
+	private JLabel lblId;			//	ID
+	private JLabel lblPw;			//	Password
 	
 	private JTextField tfId;	
 	private JPasswordField tfPw;
@@ -95,7 +100,7 @@ public class Login extends JDialog implements ActionListener {
 			}
 		});
 		
-		ActionListener aListenr = new ActionListener() {
+		ActionListener aListener = new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent ae) {
@@ -120,15 +125,15 @@ public class Login extends JDialog implements ActionListener {
 								JOptionPane.INFORMATION_MESSAGE
 						);			
 					}
-				} else {
-//					if(owner.getLoginInfo().contiansKey(id)) (
-//						
-//						
-//					)
-				}				
+					
+				} else if(ae.getActionCommand().equals(join)) {
+					new Join(Login.this);
+				}			
 		}
 	};
-		
+	
+	btnLogin.addActionListener(aListener);
+	btnJoin.addActionListener(aListener);
 		
 	};
 	
@@ -151,12 +156,6 @@ public class Login extends JDialog implements ActionListener {
 			dispose();
 		}
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	};
 	
 	public static void main(String[] args) {
 		new Login();
