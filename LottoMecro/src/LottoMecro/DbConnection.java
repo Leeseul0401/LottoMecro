@@ -76,69 +76,43 @@ public class DbConnection {
 //					System.out.println(rs.getString(rs.getMetaData().getColumnName(i+1)));
 //				}
 //			}
-	} catch(Exception e) {
-		e.printStackTrace();
-	
-	} finally {
-		if(rs != null) {
-			try {
-				rs.close();
-			} catch(SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		if(ps != null) {
-			try {
-				ps.close();
-			} catch(SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		if(conn != null) {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				e.printStackTrace();
-			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		
+		} finally {
+			close();
 		}
 	}
-}
 		
 		
-	public Boolean selectMember(String id, String pw) throws SQLException {
-
-			
-		try {
-			String sql = "SELECT member_id FROM member_table where (member_id, member_pw) in ('" + id + "', '" + pw + "' )";
-			ps = conn.prepareStatement(sql);
-		
-
-
-			// 명령어 실행
-			rs = ps.executeQuery(sql);
-//			System.out.println("rs.getMetaData().getColumnCount() === " + rs.getMetaData().getColumnCount());
-			//			System.out.println(rs);
+	public Boolean selectMember(String id, String pw) {
+			String sql = "SELECT member_id FROM member_table where member_id = '" + id + "' and member_pw = '" + pw + "'";
+			try {
+				ps = conn.prepareStatement(sql);
 				
-			if(!rs.next()) {
-//				String description = rs.getString(1);
-//				int id = rs.getInt("member_id");
-//				
-//				lotto = new Lotto(id, description);
-				for(int i=0; i<rs.getMetaData().getColumnCount(); i++) {
-					System.out.println(rs.getString(i+1));
-					id = rs.getString(rs.getMetaData().getColumnName(i+1));
-					System.out.println(id);
-				}
-				return false;
-			} else {
-				for(int i=0; i<rs.getMetaData().getColumnCount(); i++) {
-					System.out.println(rs.getString(i+1));
-					id = rs.getString(rs.getMetaData().getColumnName(i+1));
-					System.out.println(id);
-				}
+				rs = ps.executeQuery(sql);
+//				System.out.println("rs.getMetaData().getColumnCount() === " + rs.getMetaData().getColumnCount());
+//				System.out.println(rs);
+					
+				if(!rs.next()) {
+//					String description = rs.getString(1);
+//					int id = rs.getInt("member_id");
+//					
+//					lotto = new Lotto(id, description);
+					
+					return false; 
+				}  
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch(SQLException e) {
-			e.printStackTrace();
+			return true;
+			
+		
+	}
+	
+	public void close() {
+		try {
+		
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -164,11 +138,5 @@ public class DbConnection {
 				}
 			}
 		}
-		return true;
-		
-			
-	}
-	public static void main(String[] args) {
-		new DbConnection();
 	}
 }

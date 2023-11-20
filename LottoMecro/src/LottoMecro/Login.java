@@ -12,14 +12,16 @@ import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class Login extends JDialog {
-	private Lotto owner;			// Lotto 객체
+public class Login extends JFrame implements ActionListener {
+//	private Lotto owner;			// Lotto 객체
+	private MainFrame owner;
 	private DbConnection loginChk = new DbConnection();	//	Login check 객
 	private Join join;
 	
@@ -40,14 +42,15 @@ public class Login extends JDialog {
 		addListeners();
 		showFrame();
 	}	
-	public Login(Lotto owner) {
-		super(owner, "로그인", true);
+	
+	public Login(MainFrame owner) {
+		super("메인");
 		this.owner = owner;
 		init();
 		setDisplay();
 		addListeners();
 		showFrame();
-	}
+	}	
 	
 	private void init() {
 		Dimension dlb = new Dimension(120, 18); 
@@ -92,49 +95,14 @@ public class Login extends JDialog {
 	};
 	
 	private void addListeners() {
-
+		btnLogin.addActionListener(this);
+		btnJoin.addActionListener(this);
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				exit(); 
 			}
-		});
-		
-		ActionListener aListener = new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				String login = btnLogin.getActionCommand();
-				String join  = btnJoin.getActionCommand();				
-				String id	 = tfId.getText();
-				String pw	 = new String(tfPw.getPassword());
-				
-				if(ae.getActionCommand().equals(login)) {
-					if(tfId.getText().equals("")) {
-						JOptionPane.showMessageDialog(
-								Login.this,
-								"아이디를 입력해주세요!",
-								"경고",
-								JOptionPane.INFORMATION_MESSAGE
-						);
-					} else if(pw.equals("")) {
-						JOptionPane.showMessageDialog(
-								Login.this, 
-								"비밀번호를 입력하세요!",
-								"비밀번호 경고", 
-								JOptionPane.INFORMATION_MESSAGE
-						);			
-					}
-					
-				} else if(ae.getActionCommand().equals(join)) {
-					new Join(Login.this);
-				}			
-		}
-	};
-	
-	btnLogin.addActionListener(aListener);
-	btnJoin.addActionListener(aListener);
-		
+		});		
 	};
 	
 	private void showFrame() {
@@ -156,7 +124,49 @@ public class Login extends JDialog {
 			dispose();
 		}
 	}
-	
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		String login = btnLogin.getActionCommand();
+		String join  = btnJoin.getActionCommand();				
+		String id	 = tfId.getText();
+		String pw	 = new String(tfPw.getPassword());
+		
+		if(ae.getActionCommand().equals(login)) {
+			if(tfId.getText().equals("")) {
+				JOptionPane.showMessageDialog(
+						Login.this,
+						"아이디를 입력해주세요!",
+						"경고",
+						JOptionPane.INFORMATION_MESSAGE
+				);
+			} else if(pw.equals("")) {
+				JOptionPane.showMessageDialog(
+						Login.this, 
+						"비밀번호를 입력하세요!",
+						"비밀번호 경고", 
+						JOptionPane.INFORMATION_MESSAGE
+				);			
+			} else {
+				if(loginChk.selectMember(id, pw)) {
+					System.out.println("chk -------------- "+loginChk.selectMember(id, pw));
+					loginChk.close();
+					new MainFrame(Login.this);
+					
+				} else {
+					JOptionPane.showMessageDialog(
+							Login.this, 
+							"아이디나 비밀번호를 확인하세요!",
+							"경고", 
+							JOptionPane.INFORMATION_MESSAGE
+					);		
+				}
+			}
+			
+		} else if(ae.getActionCommand().equals(join)) {
+			new Join(Login.this);
+		}			
+		
+	};
 	public static void main(String[] args) {
 		new Login();
 	}

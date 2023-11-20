@@ -8,13 +8,16 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class MainFrame extends JFrame implements ActionListener {
+public class MainFrame extends JDialog implements ActionListener {
 	public final Dimension BTN_SIZE = new Dimension(150, 50);
+	
+	private Login owner;
 	private JButton btnBuy;						// 구매 버튼
 	private JButton btnCheck;					// 확인 버튼
 	private JButton btnResult;					// 결과 버튼
@@ -24,7 +27,9 @@ public class MainFrame extends JFrame implements ActionListener {
 	private CheckResult chkResult;				// 로또 당첨 결과
 	
 	///MainFrame 순서
-	public MainFrame(){
+	public MainFrame(Login owner){
+		super(owner, "로그인", true);
+		this.owner = owner;
 		init();
 		setDisplay();
 		addListeners();
@@ -153,8 +158,5 @@ public class MainFrame extends JFrame implements ActionListener {
 	}
 
 
-	// MainFrame 메인메서드
-	public static void main(String[] args) {
-		new MainFrame();
-	}
+	
 }

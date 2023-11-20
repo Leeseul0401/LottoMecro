@@ -17,7 +17,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class Join extends JDialog {
-	private DbConnection dbConnection = new DbConnection();
+	private DbConnection dbConnector = new DbConnection();
 	
 	private Login	owner;
 	private JLabel	lblId;
@@ -43,6 +43,9 @@ public class Join extends JDialog {
 		addListeners();
 		showFrame();
 	}
+	
+	
+	
 	private void init() {
 		Dimension dlb = new Dimension(120, 30);
 		lblId = new JLabel("ID");
@@ -174,7 +177,8 @@ public class Join extends JDialog {
 									JOptionPane.INFORMATION_MESSAGE
 							);
 						} else {
-							dbConnection.insertMember(id, pw, name, nickname);
+							dbConnector.insertMember(id, pw, name, nickname);
+							dbConnector.close();
 							System.out.println("insert----join");
 							JOptionPane.showMessageDialog(
 									Join.this,
@@ -194,7 +198,7 @@ public class Join extends JDialog {
 		
 	};
 	private void showFrame() {
-		setSize(500, 350);
+		setSize(500, 300);
 		setLocationRelativeTo(owner);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setVisible(true);
