@@ -56,10 +56,8 @@ public class SelectNumber extends JFrame {
 	
 	private Font defaultFont = new Font(Font.DIALOG, Font.BOLD, 15);
 	
-	public SelectNumber(MainFrame owner, SelectLottoType slType, int number) {
-		this.number = number;
+	public SelectNumber(MainFrame owner) {
 		this.owner = owner;
-		this.slType = slType;
 		init();
 		setDisplay();
 		addListeners();

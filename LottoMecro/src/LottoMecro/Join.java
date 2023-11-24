@@ -131,8 +131,10 @@ public class Join extends JDialog {
 				String nickname	= tfNickname.getText();
 				
 				if(ae.getActionCommand().equals(cancel)) {
+					setVisible(false);
 					exit();
 				} else if(ae.getActionCommand().equals(join)) {
+					setVisible(false);
 					if(id.equals("")) {
 						JOptionPane.showMessageDialog(
 								Join.this,
@@ -177,16 +179,24 @@ public class Join extends JDialog {
 									JOptionPane.INFORMATION_MESSAGE
 							);
 						} else {
-							dbConnector.insertMember(id, pw, name, nickname);
+							if(dbConnector.insertMember(id, pw, name, nickname) == 1) {
+								JOptionPane.showMessageDialog(
+										Join.this,
+										"회원가입이 완료되었습니다!",
+										"성공",
+										JOptionPane.INFORMATION_MESSAGE
+								);
+								dispose();
+							} else {
+								JOptionPane.showMessageDialog(
+										Join.this,
+										"회원가입에 실패습니다!",
+										"실패",
+										JOptionPane.INFORMATION_MESSAGE
+								);
+							}
 							dbConnector.close();
 							System.out.println("insert----join");
-							JOptionPane.showMessageDialog(
-									Join.this,
-									"회원가입이 완료되었습니다!",
-									"확인",
-									JOptionPane.INFORMATION_MESSAGE
-							);
-							dispose();
 						}
 					} 
 				}

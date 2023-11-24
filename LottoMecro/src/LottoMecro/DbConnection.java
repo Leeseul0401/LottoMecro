@@ -57,16 +57,15 @@ public class DbConnection {
 		
 	}
 
-	public void insertMember(String id, String pw, String name, String nickname) {
-
+	public int insertMember(String id, String pw, String name, String nickname) {
+		int result = 0;
 		System.out.println("insert----------db");
 		try {
 			String sql = "INSERT INTO member_table (member_id, member_pw, member_name, member_nickname) VALUES ('" + id + "' , '" + pw + "' , '" + name + "' , '" + nickname +"')";
 			ps = conn.prepareStatement(sql);
 			
 			// 명령어 실행
-			int rsId = ps.executeUpdate();
-			System.out.println(rsId);
+			result = ps.executeUpdate();
 //			while(rs.next()) {
 ////				String description = rs.getString(1);
 //				int id = rs.getInt("role_id");
@@ -82,6 +81,7 @@ public class DbConnection {
 		} finally {
 			close();
 		}
+		return result;
 	}
 		
 		
@@ -104,10 +104,41 @@ public class DbConnection {
 				}  
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}
+			} 
 			return true;
 			
 		
+	}
+	
+	public int insertLottoNumber(int[] lottoNumber, String id) {
+		int result = 0;
+		String sql = "INSERT INTO lotto_table (num1, num2, num3, num4, num5, num6, id) VALUES (";
+		for(int i=0; i<lottoNumber.length; i++) {
+			int j = lottoNumber[i];
+			sql += j;
+			sql += ",";	
+		}
+		try {			
+			sql +=  "'" + id + "')";
+			System.out.println(sql);
+			ps = conn.prepareStatement(sql);
+			
+			// 명령어 실행
+			result = ps.executeUpdate();
+//			while(rs.next()) {
+////				String description = rs.getString(1);
+//				int id = rs.getInt("role_id");
+//				
+////				lotto = new Lotto(id, description);
+//				for(int i=0; i<rs.getMetaData().getColumnCount(); i++) {
+//					System.out.println(rs.getString(rs.getMetaData().getColumnName(i+1)));
+//				}
+//			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		
+		} 
+		return result;
 	}
 	
 	public void close() {

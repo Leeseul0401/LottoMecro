@@ -18,18 +18,19 @@ public class MainFrame extends JDialog implements ActionListener {
 	public final Dimension BTN_SIZE = new Dimension(150, 50);
 	
 	private Login owner;
+	private String id;
 	private JButton btnBuy;						// 구매 버튼
 	private JButton btnCheck;					// 확인 버튼
 	private JButton btnResult;					// 결과 버튼
-	
 	private SelectLottoType selectLttTp;		// 숫자 셀렉 버튼	
 	private CheckMyNumResult chkMyNumResult;	// 나의 로또 번호
 	private CheckResult chkResult;				// 로또 당첨 결과
 	
 	///MainFrame 순서
-	public MainFrame(Login owner){
+	public MainFrame(Login owner, String id){
 		super(owner, "로그인", true);
 		this.owner = owner;
+		this.id = id;
 		init();
 		setDisplay();
 		addListeners();
@@ -97,7 +98,7 @@ public class MainFrame extends JDialog implements ActionListener {
 		JButton btn = (JButton)ae.getSource();
 		if(btn == btnBuy){					// 구입버튼 눌렀을때, SelectLottoType으로 연결
 			setVisible(false);
-			selectLttTp = new SelectLottoType(this);
+			selectLttTp = new SelectLottoType(this, id);
 			selectLttTp.setLocationRelativeTo(MainFrame.this);
 
 		} else if(btn == btnCheck) {		// 구입한 복권확인버튼 눌렀을 때, CheckMyNum으로 연결
@@ -105,36 +106,11 @@ public class MainFrame extends JDialog implements ActionListener {
 			chkMyNumResult.setLocationRelativeTo(MainFrame.this);
 			chkMyNumResult.setVisible(true);
 
-		} else if(btn == btnResult) {		// 당첨확인버튼 눌렀을 때, EnterLotto로 연결
-			String str = JOptionPane.showInputDialog(MainFrame.this, 
-					"당첨확인할 복권의 발행번호를 입력해주세요", 
-					"발행번호 입력", 
-					JOptionPane.INFORMATION_MESSAGE
-			);
-
-			if(str != null) { 
-				try {
-					int input = Integer.parseInt(str);
-					Lotto targetLotto = chkMyNumResult.getLottoInfo(input);
-					if(targetLotto != null) {
-						setVisible(false);
-						chkResult = new CheckResult(MainFrame.this, targetLotto);
-						chkResult.setLocationRelativeTo(MainFrame.this);
-					} else {
-						JOptionPane.showMessageDialog(MainFrame.this, 
-								"입력한 발행번호가 정확한지 확인해주세요", 
-								"안내", 
-								JOptionPane.INFORMATION_MESSAGE
-						);
-					}
-				} catch(NumberFormatException e) {
-					JOptionPane.showMessageDialog(MainFrame.this, 
-							"숫자로 입력해야합니다", 
-							"에러", 
-							JOptionPane.ERROR_MESSAGE
-					);
-				}	
-			}
+		} else if(btn == btnResult) {		// 당첨확인버튼 눌렀을 때 
+			setVisible(false);
+			chkResult = new CheckResult(MainFrame.this);
+			chkResult.setLocationRelativeTo(MainFrame.this);
+				
 		}
 	}
 	

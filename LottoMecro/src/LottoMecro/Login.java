@@ -44,7 +44,7 @@ public class Login extends JFrame implements ActionListener {
 	}	
 	
 	public Login(MainFrame owner) {
-		super("메인");
+		super("Lotto");
 		this.owner = owner;
 		init();
 		setDisplay();
@@ -147,10 +147,11 @@ public class Login extends JFrame implements ActionListener {
 						JOptionPane.INFORMATION_MESSAGE
 				);			
 			} else {
+				setVisible(false);
 				if(loginChk.selectMember(id, pw)) {
 					System.out.println("chk -------------- "+loginChk.selectMember(id, pw));
 					loginChk.close();
-					new MainFrame(Login.this);
+					new MainFrame(Login.this, id);
 					
 				} else {
 					JOptionPane.showMessageDialog(
