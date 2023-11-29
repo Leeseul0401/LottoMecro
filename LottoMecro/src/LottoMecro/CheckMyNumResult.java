@@ -19,7 +19,9 @@ import javax.swing.JTextArea;
 
 public class CheckMyNumResult extends JDialog {
 	private MainFrame owner;
+	private String id;
 	
+	private int[][] myLotto;
 	private JLabel imgMain;
 	
 	private JLabel lblMain;
@@ -30,18 +32,20 @@ public class CheckMyNumResult extends JDialog {
 	private JPanel pnlCenter;
 	private JTextArea taLotto;
 	private Font defaultFont = new Font(Font.DIALOG, Font.BOLD, 20);
-	
-	private Vector<Lotto> lottos;
+	private DbConnection lottoChk = new DbConnection();
+	//private Vector<Lotto> lottos;
 
-	public CheckMyNumResult(MainFrame owner){
+	public CheckMyNumResult(MainFrame owner, String id){
 		this.owner = owner;
+		this.id = id;
 		init();
 		setDisplay();
 		addListener();
 		showFrame();
+		addLotto();
 	}
 	private void init(){
-		lottos = new Vector<Lotto>();
+//		lottos = new Vector<Lotto>();
 		
 		lblMain = new JLabel("구입한 로또");
 		Font font = new Font("Dialog",Font.BOLD, 20);
@@ -94,6 +98,7 @@ public class CheckMyNumResult extends JDialog {
 	}
 	private void addListener(){
 		addWindowListener(new WindowAdapter() {
+			
 			@Override
 			public void windowClosing(WindowEvent we) {
 				setVisible(false);
@@ -109,30 +114,25 @@ public class CheckMyNumResult extends JDialog {
 		setVisible(false);
 	}
 	
-	public void addLotto(Lotto lotto) {
-		lottos.add(lotto);
-		taLotto.append(lotto.toString());
-	}
-	
-	public Lotto getLottoInfo(int publishNum) {
-		Lotto searchLotto = null;
-		try {
-			for(int i=0; i<lottos.size(); i++) {
-				if(lottos.get(i).getLottoPNum() == publishNum) {
-					if(lottos.get(i).getLottoRNum() <= Lotto.getRound()) {
-						searchLotto = lottos.get(i);
+	public void addLotto() {
+//		lottos.add(lotto);
+//		taLotto.append(lotto.toString());
+		myLotto = lottoChk.selectMyLotto(id);
+		for(int i=0; i<myLotto.length; i++) {
+			for(int j=0; j<myLotto[i].length; j++) {
+				if(myLotto[i][j] != 0) {
+					if(j == 0) {
+						taLotto.append("제 " + myLotto[i][0] + "회 Lotto\n");
 					} else {
-						searchLotto = null;
+						taLotto.append(myLotto[i][j] + " ");
 					}
+				} else {
+					break;
 				}
 			}
-		} catch(ArrayIndexOutOfBoundsException e) {
-			JOptionPane.showMessageDialog(owner, 
-					"먼저 로또를 구입해주세요", 
-					"알림", 
-					JOptionPane.INFORMATION_MESSAGE
-			);
+			taLotto.append("\n\n");
+			System.out.print(taLotto.getText());
 		}
-		return searchLotto;
 	}
+	
 }

@@ -38,7 +38,7 @@ public class MainFrame extends JDialog implements ActionListener {
 	}
 	
 	private void init(){
-		chkMyNumResult = new CheckMyNumResult(this);  // CheckMyNum 생성 (기본 안보임)
+		chkMyNumResult = new CheckMyNumResult(this, id);  // CheckMyNum 생성 (기본 안보임)
 		
 		btnBuy 		= new JButton("구매");
 		btnCheck 	= new JButton("확인");
@@ -103,6 +103,7 @@ public class MainFrame extends JDialog implements ActionListener {
 
 		} else if(btn == btnCheck) {		// 구입한 복권확인버튼 눌렀을 때, CheckMyNum으로 연결
 			setVisible(false);
+			chkMyNumResult = new CheckMyNumResult(this, id);
 			chkMyNumResult.setLocationRelativeTo(MainFrame.this);
 			chkMyNumResult.setVisible(true);
 
@@ -129,9 +130,9 @@ public class MainFrame extends JDialog implements ActionListener {
 	}
 
 	// CheckMyNum 메서드 (자동, 수동 구입에서 로또객체 생성한 것을 넘기기 위함)
-	public CheckMyNumResult getCheckMyNum(){
-		return chkMyNumResult;
-	}
+//	public CheckMyNumResult getCheckMyNum(){
+//		return chkMyNumResult;
+//	}
 
 
 	

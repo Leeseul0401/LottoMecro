@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Vector;
 
 public class DbConnection {
 	private static String dburl = "jdbc:mysql://localhost:3306/member";
@@ -109,6 +110,31 @@ public class DbConnection {
 			
 		
 	}
+	
+	public int[][] selectMyLotto(String id) {
+		int[][] lottoMyNumbers = new int[45][7];
+		int count = 0;
+		String sql = "SELECT * FROM lotto_table where id = '" + id + "'";
+		try {
+			ps = conn.prepareStatement(sql);
+			
+			rs = ps.executeQuery(sql);
+			int idx = rs.getMetaData().getColumnCount() - 1;	
+			
+			while(rs.next()) {
+				System.out.println(rs);
+				
+				for(int i=0; i<idx; i++) {
+					lottoMyNumbers[count][i] = Integer.valueOf(rs.getString(rs.getMetaData().getColumnName(i+1)));
+				}
+				count++;
+			}  
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return lottoMyNumbers;
+	
+}
 	
 	public int insertLottoNumber(int[] lottoNumber, String id) {
 		int result = 0;
